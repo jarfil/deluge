@@ -140,7 +140,7 @@ class Core(CorePluginBase):
     # Exported RPC methods #
     @export
     def add_command(self, event, command):
-        command_id = hashlib.sha1(str(time.time())).hexdigest()
+        command_id = hashlib.sha1(str(time.time()).encode('utf-8')).hexdigest()
         self.config['commands'].append((command_id, event, command))
         self.config.save()
         component.get('EventManager').emit(ExecuteCommandAddedEvent(command_id, event, command))

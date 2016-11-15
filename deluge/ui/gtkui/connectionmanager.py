@@ -95,7 +95,7 @@ class ConnectionManager(component.Component):
         localclient_username, localclient_password = get_localhost_auth()
         default_config = {
             'hosts': [(
-                hashlib.sha1(str(time.time())).hexdigest(),
+                hashlib.sha1(str(time.time()).encode('utf-8')).hexdigest(),
                 DEFAULT_HOST,
                 DEFAULT_PORT,
                 localclient_username,
@@ -220,7 +220,7 @@ class ConnectionManager(component.Component):
 
         # Host isn't in the list, so lets add it
         row = self.liststore.append()
-        self.liststore[row][HOSTLIST_COL_ID] = hashlib.sha1(str(time.time())).hexdigest()
+        self.liststore[row][HOSTLIST_COL_ID] = hashlib.sha1(str(time.time()).encode('utf-8')).hexdigest()
         self.liststore[row][HOSTLIST_COL_HOST] = host
         self.liststore[row][HOSTLIST_COL_PORT] = port
         self.liststore[row][HOSTLIST_COL_USER] = username

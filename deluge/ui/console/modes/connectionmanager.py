@@ -136,7 +136,7 @@ class ConnectionManager(BaseMode, PopupsHandler):
             if (host[1], host[2], host[3]) == (hostname, port, username):
                 self.report_message("Can't add host", 'Host already in list')
                 return
-        newid = hashlib.sha1(str(time.time())).hexdigest()
+        newid = hashlib.sha1(str(time.time()).encode('utf-8')).hexdigest()
         self.config['hosts'].append((newid, hostname, port, username, password))
         self.config.save()
         self.update_select_host_popup()

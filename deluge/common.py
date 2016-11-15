@@ -917,7 +917,7 @@ def create_localclient_account(append=False):
     with open(auth_file, 'a' if append else 'w') as _file:
         _file.write(':'.join([
             'localclient',
-            sha(str(random.random())).hexdigest(),
+            sha(str(random.random()).encode('utf-8')).hexdigest(),
             str(AUTH_LEVEL_ADMIN)
         ]) + '\n')
         _file.flush()

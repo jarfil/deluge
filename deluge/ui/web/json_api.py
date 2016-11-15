@@ -848,7 +848,7 @@ class WebApi(JSONComponent):
             return (False, 'Port is invalid')
 
         # Host isn't in the list, so lets add it
-        connection_id = hashlib.sha1(str(time.time())).hexdigest()
+        connection_id = hashlib.sha1(str(time.time()).encode('utf-8')).hexdigest()
         self.host_list['hosts'].append([connection_id, host, port, username,
                                         password])
         self.host_list.save()
