@@ -55,8 +55,8 @@ def start_daemon(skip_start=False):
     from deluge.core.daemon import is_daemon_running
     pid_file = get_config_dir('deluged.pid')
     if is_daemon_running(pid_file):
-        print('Cannot run multiple daemons using the same config directory.\n'
-              'If you believe this is an error, you can force a start by deleting: %s' % pid_file)
+        print(('Cannot run multiple daemons using the same config directory.\n'
+              'If you believe this is an error, you can force a start by deleting: %s' % pid_file))
         sys.exit(1)
 
     log = getLogger(__name__)

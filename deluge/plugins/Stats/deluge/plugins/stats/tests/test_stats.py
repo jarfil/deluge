@@ -18,12 +18,12 @@ from deluge.ui.client import client
 
 
 def print_totals(totals):
-    for name, value in totals.items():
-        print(name, fsize(value))
+    for name, value in list(totals.items()):
+        print((name, fsize(value)))
 
     print('overhead:')
-    print('up:', fsize(totals['total_upload'] - totals['total_payload_upload']))
-    print('down:', fsize(totals['total_download'] - totals['total_payload_download']))
+    print(('up:', fsize(totals['total_upload'] - totals['total_payload_upload'])))
+    print(('down:', fsize(totals['total_download'] - totals['total_payload_download'])))
 
 
 class StatsTestCase(BaseTestCase):

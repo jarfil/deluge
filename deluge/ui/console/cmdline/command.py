@@ -31,7 +31,7 @@ class Commander(object):
         self.interactive = interactive
 
     def write(self, line):
-        print(strip_colors(line))
+        print((strip_colors(line)))
 
     def do_command(self, cmd_line):
         """Run a console command.

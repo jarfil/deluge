@@ -74,4 +74,4 @@ def get_version(prefix='', suffix=''):
     return version
 
 if __name__ == '__main__':
-    print(get_version(prefix='deluge-', suffix='.dev0'))
+    print((get_version(prefix='deluge-', suffix='.dev0')))

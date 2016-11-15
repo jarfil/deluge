@@ -160,7 +160,7 @@ class TorrentOptions(dict):
             'super_seeding': 'super_seeding',
             'priority': 'priority',
         }
-        for opt_k, conf_k in options_conf_map.items():
+        for opt_k, conf_k in list(options_conf_map.items()):
             self[opt_k] = config[conf_k]
         self['file_priorities'] = []
         self['mapped_files'] = {}

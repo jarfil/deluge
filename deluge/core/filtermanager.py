@@ -173,7 +173,7 @@ class FilterManager(component.Component):
         # Leftover filter arguments, default filter on status fields.
         for torrent_id in list(torrent_ids):
             status = self.core.create_torrent_status(torrent_id, torrent_keys, plugin_keys)
-            for field, values in filter_dict.items():
+            for field, values in list(filter_dict.items()):
                 if field in status and status[field] in values:
                     continue
                 elif torrent_id in torrent_ids:

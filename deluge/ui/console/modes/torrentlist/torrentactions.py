@@ -101,7 +101,7 @@ def action_torrent_info(mode=None, torrent_ids=None, **kwargs):
 
     def _do_set_torrent_options(torrent_ids, result):
         options = {}
-        for opt, val in result.items():
+        for opt, val in list(result.items()):
             if val['value'] not in ['multiple', None]:
                 options[opt] = val['value']
         client.core.set_torrent_options(torrent_ids, options)

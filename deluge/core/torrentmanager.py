@@ -743,7 +743,7 @@ class TorrentManager(component.Component):
 
         """
         if torrent_ids is None:
-            torrent_ids = (t[0] for t in self.torrents.items() if t[1].handle.need_save_resume_data())
+            torrent_ids = (t[0] for t in list(self.torrents.items()) if t[1].handle.need_save_resume_data())
 
         def on_torrent_resume_save(dummy_result, torrent_id):
             """Recieved torrent resume_data alert so remove from waiting list"""
@@ -915,7 +915,7 @@ class TorrentManager(component.Component):
 
     def cleanup_torrents_prev_status(self):
         """Run cleanup_prev_status for each registered torrent"""
-        for torrent in self.torrents.items():
+        for torrent in list(self.torrents.items()):
             torrent[1].cleanup_prev_status()
 
     def on_set_max_connections_per_torrent(self, key, value):

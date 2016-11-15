@@ -47,8 +47,8 @@ class CustomNotifications(object):
         pass
 
     def disable(self):
-        for kind in self.custom_notifications.keys():
-            for eventtype in self.custom_notifications[kind].copy().keys():
+        for kind in list(self.custom_notifications.keys()):
+            for eventtype in list(self.custom_notifications[kind].copy().keys()):
                 wrapper, handler = self.custom_notifications[kind][eventtype]
                 self._deregister_custom_provider(kind, eventtype)
 

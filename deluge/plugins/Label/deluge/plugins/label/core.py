@@ -118,7 +118,7 @@ class Core(CorePluginBase):
         log.debug('post_torrent_add')
         torrent = self.torrents[torrent_id]
 
-        for label_id, options in self.labels.items():
+        for label_id, options in list(self.labels.items()):
             if options['auto_add']:
                 if self._has_auto_match(torrent, options):
                     self.set_torrent(torrent_id, label_id)
@@ -266,14 +266,14 @@ class Core(CorePluginBase):
         self.labels[label_id].update(options_dict)
 
         # apply
-        for torrent_id, label in self.torrent_labels.items():
+        for torrent_id, label in list(self.torrent_labels.items()):
             if label_id == label and torrent_id in self.torrents:
                 self._set_torrent_options(torrent_id, label_id)
 
         # auto add
         options = self.labels[label_id]
         if options['auto_add']:
-            for torrent_id, torrent in self.torrents.items():
+            for torrent_id, torrent in list(self.torrents.items()):
                 if self._has_auto_match(torrent, options):
                     self.set_torrent(torrent_id, label_id)
 

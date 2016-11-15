@@ -189,7 +189,7 @@ Please use commands from the command line, e.g.:\n
                 rm = reason.getErrorMessage()
             else:
                 rm = reason.value.message
-            print('Could not connect to daemon: %s:%s\n %s' % (options.daemon_addr, options.daemon_port, rm))
+            print(('Could not connect to daemon: %s:%s\n %s' % (options.daemon_addr, options.daemon_port, rm)))
             commander.do_command('quit')
 
         d = None
@@ -423,7 +423,7 @@ Please use commands from the command line, e.g.:\n
                 component.get('CmdLine').add_line(s, False)
                 self.events.append(s)
         else:
-            print(colors.strip_colors(deluge.common.utf8_encoded(s)))
+            print((colors.strip_colors(deluge.common.utf8_encoded(s))))
 
     def write_event(self, s):
         if self.interactive:
@@ -434,7 +434,7 @@ Please use commands from the command line, e.g.:\n
                 component.get('CmdLine').add_line(s, False)
                 self.events.append(s)
         else:
-            print(colors.strip_colors(deluge.common.utf8_encoded(s)))
+            print((colors.strip_colors(deluge.common.utf8_encoded(s))))
 
     def _migrate_config_1_to_2(self, config):
         """Create better structure by moving most settings out of dict root

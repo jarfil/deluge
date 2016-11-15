@@ -109,4 +109,4 @@ for filepath in to_translate:
 # Update web js gettext
 create_gettext_js(WEBUI_JS_DIR)
 
-print('Created %s and updated gettext.js' % POT_FILEPATH)
+print(('Created %s and updated gettext.js' % POT_FILEPATH))

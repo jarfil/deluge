@@ -60,11 +60,11 @@ gtk_root = os.path.join(gtk.__path__[0], '..', 'runtime')
 build_dir = os.path.join('build-win32', 'deluge-bbfreeze-' + build_version)
 
 if DEBUG:
-    print('Python Path: %s' % python_path)
-    print('Gtk Path: %s' % gtk_root)
-    print('bbfreeze Output Path: %s' % build_dir)
+    print(('Python Path: %s' % python_path))
+    print(('Gtk Path: %s' % gtk_root))
+    print(('bbfreeze Output Path: %s' % build_dir))
 
-print('Freezing Deluge %s...' % build_version)
+print(('Freezing Deluge %s...' % build_version))
 # Disable printing to console for bbfreezing.
 if not DEBUG:
     sys.stdout = open(os.devnull, 'w')

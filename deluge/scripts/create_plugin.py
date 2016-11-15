@@ -56,7 +56,7 @@ def create_plugin():
     python_path = sys.executable
 
     if os.path.exists(plugin_base):
-        print('the directory %s already exists, delete it first' % plugin_base)
+        print(('the directory %s already exists, delete it first' % plugin_base))
         return
 
     def write_file(path, filename, template, include_gpl=True):

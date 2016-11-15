@@ -22,7 +22,7 @@ class DaemonBase(object):
     def terminate_core(self, *args):
         if args[0] is not None:
             if hasattr(args[0], 'getTraceback'):
-                print('terminate_core: Errback Exception: %s' % args[0].getTraceback())
+                print(('terminate_core: Errback Exception: %s' % args[0].getTraceback()))
 
         if not self.core.killed:
             d = self.core.kill()

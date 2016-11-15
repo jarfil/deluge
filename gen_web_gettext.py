@@ -97,10 +97,10 @@ def create_gettext_js(js_dir):
 
 if __name__ == '__main__':
     gettext_fname = create_gettext_js(WEBUI_JS_DIR)
-    print("Created '%s'" % gettext_fname)
+    print(("Created '%s'" % gettext_fname))
     missed_markup = check_missing_markup(WEBUI_JS_DIR)
     if missed_markup:
         print('Possible missed text for translation markup:')
-        for text, filenames in missed_markup.items():
+        for text, filenames in list(missed_markup.items()):
             for filename_lineno in filenames:
-                print('{0:<58}    {1}'.format(':'.join(filename_lineno), text))
+                print(('{0:<58}    {1}'.format(':'.join(filename_lineno), text)))

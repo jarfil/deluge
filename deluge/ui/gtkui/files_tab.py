@@ -362,7 +362,7 @@ class FilesTab(Tab):
 
     def add_files(self, parent_iter, split_files):
         chunk_size_total = 0
-        for key, value in split_files.items():
+        for key, value in list(split_files.items()):
             if key.endswith('/'):
                 chunk_iter = self.treestore.append(parent_iter,
                                                    [key, 0, '', 0, 0, -1, gtk.STOCK_DIRECTORY])
@@ -646,7 +646,7 @@ class FilesTab(Tab):
                 p_itr = self.get_iter_at_path('/'.join(parent_path) + '/')
                 old_name_itr = self.get_iter_at_path(old_name)
                 self.treestore.append(p_itr,
-                                      self.treestore.get(old_name_itr, *range(self.treestore.get_n_columns())))
+                                      self.treestore.get(old_name_itr, *list(range(self.treestore.get_n_columns()))))
                 self.treestore.remove(old_name_itr)
 
                 # Remove old parent path
@@ -660,7 +660,7 @@ class FilesTab(Tab):
                         parent_iter, [f + '/', 0, '', 0, 0, -1, gtk.STOCK_DIRECTORY])
                 child = self.get_iter_at_path(old_name)
                 self.treestore.append(parent_iter,
-                                      self.treestore.get(child, *range(self.treestore.get_n_columns())))
+                                      self.treestore.get(child, *list(range(self.treestore.get_n_columns()))))
                 self.treestore.remove(child)
 
         else:

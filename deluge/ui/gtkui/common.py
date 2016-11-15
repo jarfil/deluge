@@ -141,7 +141,7 @@ def reparent_iter(treestore, itr, parent, move_siblings=False):
 
     def move_children(i, dest):
         while i:
-            n_cols = treestore.append(dest, treestore.get(i, *range(treestore.get_n_columns())))
+            n_cols = treestore.append(dest, treestore.get(i, *list(range(treestore.get_n_columns()))))
             to_remove = i
             if treestore.iter_children(i):
                 move_children(treestore.iter_children(i), n_cols)

@@ -492,7 +492,7 @@ class MenuBar(component.Component):
         known_accounts_to_log = []
         for account in known_accounts:
             account_to_log = {}
-            for key, value in account.copy().items():
+            for key, value in list(account.copy().items()):
                 if key == 'password':
                     value = '*' * len(value)
                 account_to_log[key] = value
@@ -535,7 +535,7 @@ class MenuBar(component.Component):
             return
 
         torrent_owner = component.get('TorrentView').get_torrent_status(selected[0])['owner']
-        for username, item in self.change_owner_submenu_items.items():
+        for username, item in list(self.change_owner_submenu_items.items()):
             item.set_active(username == torrent_owner)
 
     def _on_change_owner_toggled(self, widget, username):

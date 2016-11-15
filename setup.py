@@ -138,11 +138,11 @@ class BuildTranslations(cmd.Command):
             intltool_merge = 'intltool-merge'
             intltool_merge_opts = '--utf8 --quiet --desktop-style'
             desktop_in = 'deluge/ui/data/share/applications/deluge.desktop.in'
-            print('Creating desktop file: %s' % desktop_data)
+            print(('Creating desktop file: %s' % desktop_data))
             os.system('C_ALL=C ' + '%s ' * 5 % (intltool_merge, intltool_merge_opts,
                                                 po_dir, desktop_in, desktop_data))
 
-        print('Compiling po files from %s...' % po_dir)
+        print(('Compiling po files from %s...' % po_dir))
         for path, names, filenames in os.walk(po_dir):
             for f in filenames:
                 upto_date = False
@@ -231,9 +231,9 @@ class Build(_build):
         _build.run(self)
         try:
             from deluge._libtorrent import lt
-            print('Found libtorrent version: %s' % lt.__version__)
+            print(('Found libtorrent version: %s' % lt.__version__))
         except ImportError as ex:
-            print('Warning libtorrent not found: %s' % ex)
+            print(('Warning libtorrent not found: %s' % ex))
 
 
 class InstallData(_install_data):
@@ -269,17 +269,17 @@ class CleanPlugins(cmd.Command):
                 c = 'cd ' + path + ' && ' + sys.executable + ' setup.py clean'
                 if self.all:
                     c += ' -a'
-                print('Calling \'%s\'' % c)
+                print(('Calling \'%s\'' % c))
                 os.system(c)
 
             # Delete the .eggs
             if path[-4:] == '.egg':
-                print("Deleting egg file '%s'" % path)
+                print(("Deleting egg file '%s'" % path))
                 os.remove(path)
 
             # Delete the .egg-link
             if path[-9:] == '.egg-link':
-                print("Deleting egg link '%s'" % path)
+                print(("Deleting egg link '%s'" % path))
                 os.remove(path)
 
         egg_info_dir_path = 'deluge/plugins/*/*.egg-info'
@@ -287,7 +287,7 @@ class CleanPlugins(cmd.Command):
         for path in glob.glob(egg_info_dir_path):
             # Delete the .egg-info's directories
             if path[-9:] == '.egg-info':
-                print('Deleting %s' % path)
+                print(('Deleting %s' % path))
                 for fpath in os.listdir(path):
                     os.remove(os.path.join(path, fpath))
                 os.removedirs(path)
@@ -295,7 +295,7 @@ class CleanPlugins(cmd.Command):
         root_egg_info_dir_path = 'deluge*.egg-info'
 
         for path in glob.glob(root_egg_info_dir_path):
-            print('Deleting %s' % path)
+            print(('Deleting %s' % path))
             for fpath in os.listdir(path):
                 os.remove(os.path.join(path, fpath))
             os.removedirs(path)
@@ -311,7 +311,7 @@ class Clean(_clean):
         _clean.run(self)
 
         if os.path.exists(desktop_data):
-            print('Deleting %s' % desktop_data)
+            print(('Deleting %s' % desktop_data))
             os.remove(desktop_data)
 
 cmdclass = {
