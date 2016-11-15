@@ -7,7 +7,7 @@
 # See LICENSE for more details.
 #
 
-from __future__ import division
+
 
 import base64
 import hashlib
@@ -893,11 +893,11 @@ class WebApi(JSONComponent):
         :type config: dictionary
         """
         web_config = component.get('DelugeWeb').config
-        for key in config.keys():
+        for key in list(config.keys()):
             if key in ['sessions', 'pwd_salt', 'pwd_sha1']:
                 log.warn("Ignored attempt to overwrite web config key '%s'", key)
                 continue
-            if isinstance(config[key], basestring):
+            if isinstance(config[key], str):
                 config[key] = config[key].encode('utf8')
             web_config[key] = config[key]
 
@@ -914,7 +914,7 @@ class WebApi(JSONComponent):
         """
 
         return {
-            'enabled_plugins': component.get('Web.PluginManager').plugins.keys(),
+            'enabled_plugins': list(component.get('Web.PluginManager').plugins.keys()),
             'available_plugins': component.get('Web.PluginManager').available_plugins
         }
 

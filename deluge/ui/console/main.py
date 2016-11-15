@@ -8,7 +8,7 @@
 # See LICENSE for more details.
 #
 
-from __future__ import print_function
+
 
 import locale
 import logging
@@ -331,7 +331,7 @@ Please use commands from the command line, e.g.:\n
             self.events = []
 
             def on_torrents_status(torrents):
-                for torrent_id, status in torrents.items():
+                for torrent_id, status in list(torrents.items()):
                     self.torrents.append((torrent_id, status['name']))
                 self.started_deferred.callback(True)
 
@@ -371,8 +371,8 @@ Please use commands from the command line, e.g.:\n
             no matches are found.
 
         """
-        if not isinstance(string, unicode):
-            string = unicode(string, self.encoding)
+        if not isinstance(string, str):
+            string = str(string, self.encoding)
 
         if string == '*' or string == '':
             return [tid for tid, name in self.torrents]
@@ -387,8 +387,8 @@ Please use commands from the command line, e.g.:\n
 
         matches = []
         for tid, name in self.torrents:
-            if not isinstance(name, unicode):
-                name = unicode(name, self.encoding)
+            if not isinstance(name, str):
+                name = str(name, self.encoding)
             if getattr(tid, match_func, None)(string) or getattr(name, match_func, None)(string):
                 matches.append(tid)
         return matches

@@ -9,7 +9,7 @@
 """Common functions for various parts of gtkui to use."""
 
 import contextlib
-import cPickle
+import pickle
 import logging
 import os
 import shutil
@@ -141,7 +141,7 @@ def reparent_iter(treestore, itr, parent, move_siblings=False):
 
     def move_children(i, dest):
         while i:
-            n_cols = treestore.append(dest, treestore.get(i, *xrange(treestore.get_n_columns())))
+            n_cols = treestore.append(dest, treestore.get(i, *range(treestore.get_n_columns())))
             to_remove = i
             if treestore.iter_children(i):
                 move_children(treestore.iter_children(i), n_cols)
@@ -186,29 +186,29 @@ def associate_magnet_links(overwrite=False):
     """
 
     if windows_check():
-        import _winreg
+        import winreg
 
         try:
-            hkey = _winreg.OpenKey(_winreg.HKEY_CLASSES_ROOT, 'Magnet')
+            hkey = winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, 'Magnet')
         except WindowsError:
             overwrite = True
         else:
-            _winreg.CloseKey(hkey)
+            winreg.CloseKey(hkey)
 
         if overwrite:
             deluge_exe = os.path.join(os.path.dirname(sys.executable), 'deluge.exe')
             try:
-                magnet_key = _winreg.CreateKey(_winreg.HKEY_CLASSES_ROOT, 'Magnet')
+                magnet_key = winreg.CreateKey(winreg.HKEY_CLASSES_ROOT, 'Magnet')
             except WindowsError:
                 # Could not create for all users, falling back to current user
-                magnet_key = _winreg.CreateKey(_winreg.HKEY_CURRENT_USER, 'Software\\Classes\\Magnet')
+                magnet_key = winreg.CreateKey(winreg.HKEY_CURRENT_USER, 'Software\\Classes\\Magnet')
 
-            _winreg.SetValue(magnet_key, '', _winreg.REG_SZ, 'URL:Magnet Protocol')
-            _winreg.SetValueEx(magnet_key, 'URL Protocol', 0, _winreg.REG_SZ, '')
-            _winreg.SetValueEx(magnet_key, 'BrowserFlags', 0, _winreg.REG_DWORD, 0x8)
-            _winreg.SetValue(magnet_key, 'DefaultIcon', _winreg.REG_SZ, '{},0'.format(deluge_exe))
-            _winreg.SetValue(magnet_key, r'shell\open\command', _winreg.REG_SZ, '"{}" "%1"'.format(deluge_exe))
-            _winreg.CloseKey(magnet_key)
+            winreg.SetValue(magnet_key, '', winreg.REG_SZ, 'URL:Magnet Protocol')
+            winreg.SetValueEx(magnet_key, 'URL Protocol', 0, winreg.REG_SZ, '')
+            winreg.SetValueEx(magnet_key, 'BrowserFlags', 0, winreg.REG_DWORD, 0x8)
+            winreg.SetValue(magnet_key, 'DefaultIcon', winreg.REG_SZ, '{},0'.format(deluge_exe))
+            winreg.SetValue(magnet_key, r'shell\open\command', winreg.REG_SZ, '"{}" "%1"'.format(deluge_exe))
+            winreg.CloseKey(magnet_key)
 
     # Don't try associate magnet on OSX see: #2420
     elif not osx_check():
@@ -257,11 +257,11 @@ def save_pickled_state_file(filename, state):
         try:
             with open(filepath_tmp, 'wb') as _file:
                 # Pickle the state object
-                cPickle.dump(state, _file)
+                pickle.dump(state, _file)
                 _file.flush()
                 os.fsync(_file.fileno())
             shutil.move(filepath_tmp, filepath)
-        except (IOError, EOFError, cPickle.PicklingError) as ex:
+        except (IOError, EOFError, pickle.PicklingError) as ex:
             log.error('Unable to save %s: %s', filename, ex)
             if os.path.isfile(filepath_bak):
                 log.info('Restoring backup of %s from: %s', filename, filepath_bak)
@@ -286,8 +286,8 @@ def load_pickled_state_file(filename):
         log.info('Opening %s for load: %s', filename, _filepath)
         try:
             with open(_filepath, 'rb') as _file:
-                state = cPickle.load(_file)
-        except (IOError, cPickle.UnpicklingError) as ex:
+                state = pickle.load(_file)
+        except (IOError, pickle.UnpicklingError) as ex:
             log.warning('Unable to load %s: %s', _filepath, ex)
         else:
             log.info('Successfully loaded %s: %s', filename, _filepath)

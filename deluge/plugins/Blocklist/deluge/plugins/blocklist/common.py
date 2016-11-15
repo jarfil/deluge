@@ -38,7 +38,7 @@ def raises_errors_as(error):
                 return func(self, *args, **kwargs)
             except:
                 (value, tb) = exc_info()[1:]
-                raise error, value, tb
+                raise error(value).with_traceback(tb)
         return wrapper
     return decorator
 
@@ -143,17 +143,17 @@ class IP(object):
 #        return IP(q1, q2, q3, q4)
 
     def __lt__(self, other):
-        if isinstance(other, basestring):
+        if isinstance(other, str):
             other = IP.parse(other)
         return self.long < other.long
 
     def __gt__(self, other):
-        if isinstance(other, basestring):
+        if isinstance(other, str):
             other = IP.parse(other)
         return self.long > other.long
 
     def __eq__(self, other):
-        if isinstance(other, basestring):
+        if isinstance(other, str):
             other = IP.parse(other)
         return self.long == other.long
 

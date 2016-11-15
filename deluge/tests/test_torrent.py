@@ -1,11 +1,11 @@
-from __future__ import print_function
+
 
 import base64
 import os
 import time
 
-from twisted.internet import defer, reactor
-from twisted.internet.task import deferLater
+from .twisted.internet import defer, reactor
+from .twisted.internet.task import deferLater
 
 import deluge.component as component
 import deluge.core.torrent
@@ -49,7 +49,7 @@ class TorrentTestCase(BaseTestCase):
 
     def assert_state(self, torrent, state):
         torrent.update_state()
-        self.assertEquals(torrent.state, state)
+        self.assertEqual(torrent.state, state)
 
     def get_torrent_atp(self, filename):
         filename = common.get_test_data_file(filename)
@@ -80,21 +80,21 @@ class TorrentTestCase(BaseTestCase):
         non_prioritized_pieces = list(range(len(priorities)))
 
         # The prioritized indexes are the same as we expect
-        self.assertEquals(prioritized_pieces, prioritized_piece_indexes)
+        self.assertEqual(prioritized_pieces, prioritized_piece_indexes)
 
         # Test the priority of the prioritized pieces
         for first, last in prioritized_pieces:
             for i in range(first, last):
                 if i in non_prioritized_pieces:
                     non_prioritized_pieces.remove(i)
-                self.assertEquals(priorities[i], 7)
+                self.assertEqual(priorities[i], 7)
 
         # Test the priority of all the non-prioritized pieces
         for i in non_prioritized_pieces:
-            self.assertEquals(priorities[i], 1)
+            self.assertEqual(priorities[i], 1)
 
         # The length of the list of new priorites is the same as the original
-        self.assertEquals(len(priorities_original), len(new_priorites))
+        self.assertEqual(len(priorities_original), len(new_priorites))
 
         # self.print_priority_list(priorities)
 
@@ -110,7 +110,7 @@ class TorrentTestCase(BaseTestCase):
 
         # Test the priority of the prioritized pieces
         for i in priorities:
-            self.assertEquals(priorities[i], 1)
+            self.assertEqual(priorities[i], 1)
 
         # self.print_priority_list(priorities)
 
@@ -188,7 +188,7 @@ class TorrentTestCase(BaseTestCase):
         def assert_resume_data():
             self.assert_state(torrent, 'Error')
             tm_resume_data = lt.bdecode(self.core.torrentmanager.resume_data[torrent.torrent_id])
-            self.assertEquals(tm_resume_data, resume_data)
+            self.assertEqual(tm_resume_data, resume_data)
 
         yield deferLater(reactor, 0.5, assert_resume_data)
         return

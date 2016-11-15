@@ -2,7 +2,7 @@ import base64
 import warnings
 
 import pytest
-from twisted.internet import defer
+from .twisted.internet import defer
 
 from deluge import component
 from deluge.core.core import Core

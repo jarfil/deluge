@@ -8,7 +8,7 @@
 # See LICENSE for more details.
 #
 
-from __future__ import division
+
 
 from os.path import sep as dirsep
 
@@ -146,7 +146,7 @@ class Command(BaseCommand):
                 self.console.write('{!error!}Unknown sort key: ' + sort_key + ', will sort on name')
                 sort_key = 'name'
                 sort_reverse = False
-            for key, value in sorted(status.items(), key=lambda x: x[1].get(sort_key), reverse=sort_reverse):
+            for key, value in sorted(list(status.items()), key=lambda x: x[1].get(sort_key), reverse=sort_reverse):
                 self.show_info(key, status[key], options.verbose, options.detailed)
 
         def on_torrents_status_fail(reason):
@@ -211,8 +211,8 @@ class Command(BaseCommand):
             def tlen(string):
                 return strwidth(format_utils.remove_formatting(string))
 
-            if not isinstance(col_filename, unicode):
-                col_filename = unicode(col_filename, 'utf-8')
+            if not isinstance(col_filename, str):
+                col_filename = str(col_filename, 'utf-8')
 
             col_all_info = col_size + col_progress + col_priority
             # Check how much space we've got left after writing all the info

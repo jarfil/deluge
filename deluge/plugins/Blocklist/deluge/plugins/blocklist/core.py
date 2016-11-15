@@ -8,7 +8,7 @@
 # See LICENSE for more details.
 #
 
-from __future__ import division
+
 
 import logging
 import os
@@ -16,7 +16,7 @@ import shutil
 import time
 from datetime import datetime, timedelta
 from email.utils import formatdate
-from urlparse import urljoin
+from urllib.parse import urljoin
 
 from twisted.internet import defer, threads
 from twisted.internet.task import LoopingCall
@@ -170,7 +170,7 @@ class Core(CorePluginBase):
 
         """
         needs_blocklist_import = False
-        for key in config.keys():
+        for key in list(config.keys()):
             if key == 'whitelisted':
                 saved = set(self.config[key])
                 update = set(config[key])

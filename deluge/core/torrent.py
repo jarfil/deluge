@@ -14,13 +14,13 @@ Attributes:
 
 """
 
-from __future__ import division
+
 
 import logging
 import os
 import socket
 from future_builtins import zip
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from twisted.internet.defer import Deferred, DeferredList
 
@@ -160,7 +160,7 @@ class TorrentOptions(dict):
             'super_seeding': 'super_seeding',
             'priority': 'priority',
         }
-        for opt_k, conf_k in options_conf_map.iteritems():
+        for opt_k, conf_k in options_conf_map.items():
             self[opt_k] = config[conf_k]
         self['file_priorities'] = []
         self['mapped_files'] = {}
@@ -290,7 +290,7 @@ class Torrent(object):
             self.options['prioritize_first_last_pieces'] = options['prioritize_first_last_pieces']
             skip_func.append('prioritize_first_last_pieces')
 
-        for key, value in options.items():
+        for key, value in list(options.items()):
             if key in self.options:
                 options_set_func = getattr(self, 'set_' + key, None)
                 if options_set_func and key not in skip_func:
@@ -934,7 +934,7 @@ class Torrent(object):
             self.update_status(self.handle.status())
 
         if all_keys:
-            keys = self.status_funcs.keys()
+            keys = list(self.status_funcs.keys())
 
         status_dict = {}
 
@@ -946,7 +946,7 @@ class Torrent(object):
             if session_id in self.prev_status:
                 # We have a previous status dict, so lets make a diff
                 status_diff = {}
-                for key, value in status_dict.items():
+                for key, value in list(status_dict.items()):
                     if key in self.prev_status[session_id]:
                         if value != self.prev_status[session_id][key]:
                             status_diff[key] = value
@@ -1317,7 +1317,7 @@ class Torrent(object):
             torrent.waiting_on_folder_rename = [_dir for _dir in torrent.waiting_on_folder_rename if _dir]
             component.get('TorrentManager').save_resume_data((self.torrent_id,))
 
-        d = DeferredList(wait_on_folder.values())
+        d = DeferredList(list(wait_on_folder.values()))
         d.addBoth(on_folder_rename_complete, self, folder, new_folder)
         return d
 

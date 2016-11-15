@@ -10,8 +10,8 @@
 
 import base64
 import os
-from urllib import url2pathname
-from urlparse import urlparse
+from urllib.request import url2pathname
+from urllib.parse import urlparse
 
 from twisted.internet import defer
 

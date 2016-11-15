@@ -10,7 +10,7 @@
 
 """Script to parse javascript files for translation strings and generate gettext.js"""
 
-from __future__ import print_function
+
 
 import os
 import re
@@ -101,6 +101,6 @@ if __name__ == '__main__':
     missed_markup = check_missing_markup(WEBUI_JS_DIR)
     if missed_markup:
         print('Possible missed text for translation markup:')
-        for text, filenames in missed_markup.iteritems():
+        for text, filenames in missed_markup.items():
             for filename_lineno in filenames:
                 print('{0:<58}    {1}'.format(':'.join(filename_lineno), text))

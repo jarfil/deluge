@@ -7,16 +7,16 @@
 # See LICENSE for more details.
 #
 
-from __future__ import print_function
+
 
 import argparse
 import exceptions
-import StringIO
+import io
 import sys
 
 import mock
 import pytest
-from twisted.internet import defer
+from .twisted.internet import defer
 
 import deluge
 import deluge.component as component
@@ -44,7 +44,7 @@ sys_stdout = sys.stdout
 class StringFileDescriptor(object):
     """File descriptor that writes to string buffer"""
     def __init__(self, fd):
-        self.out = StringIO.StringIO()
+        self.out = io.StringIO()
         self.fd = fd
         for a in ['encoding']:
             setattr(self, a, getattr(sys_stdout, a))

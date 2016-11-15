@@ -28,7 +28,7 @@ class DelugeEventMetaClass(type):
             known_events[name] = self
 
 
-class DelugeEvent(object):
+class DelugeEvent(object, metaclass=DelugeEventMetaClass):
     """
     The base class for all events.
 
@@ -38,7 +38,6 @@ class DelugeEvent(object):
     :type args: list
 
     """
-    __metaclass__ = DelugeEventMetaClass
 
     def _get_name(self):
         return self.__class__.__name__

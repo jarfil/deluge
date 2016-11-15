@@ -30,7 +30,7 @@ DEFAULT_PREFS = {
     'low_active': -1,
     'low_active_down': -1,
     'low_active_up': -1,
-    'button_state': [[0] * 7 for dummy in xrange(24)]
+    'button_state': [[0] * 7 for dummy in range(24)]
 }
 
 STATES = {
@@ -146,7 +146,7 @@ class Core(CorePluginBase):
     @export()
     def set_config(self, config):
         'sets the config dictionary'
-        for key in config.keys():
+        for key in list(config.keys()):
             self.config[key] = config[key]
         self.config.save()
         self.do_schedule(False)

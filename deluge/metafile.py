@@ -11,7 +11,7 @@
 # See LICENSE for more details.
 #
 
-from __future__ import division
+
 
 import logging
 import os.path
@@ -28,9 +28,9 @@ log = logging.getLogger(__name__)
 ignore = ['core', 'CVS', 'Thumbs.db', 'desktop.ini']
 
 noncharacter_translate = {}
-for i in xrange(0xD800, 0xE000):
+for i in range(0xD800, 0xE000):
     noncharacter_translate[i] = ord('-')
-for i in xrange(0xFDD0, 0xFDF0):
+for i in range(0xFDD0, 0xFDF0):
     noncharacter_translate[i] = ord('-')
 for i in (0xFFFE, 0xFFFF):
     noncharacter_translate[i] = ord('-')
@@ -47,7 +47,7 @@ def get_filesystem_encoding():
 def decode_from_filesystem(path):
     encoding = get_filesystem_encoding()
     if encoding is None:
-        assert isinstance(path, unicode), 'Path should be unicode not %s' % type(path)
+        assert isinstance(path, str), 'Path should be unicode not %s' % type(path)
         decoded_path = path
     else:
         assert isinstance(path, str), 'Path should be str not %s' % type(path)
@@ -141,7 +141,7 @@ def calcsize(path):
 def makeinfo(path, piece_length, progress, name=None, content_type=None, private=False):
     # HEREDAVE. If path is directory, how do we assign content type?
     def to_utf8(name):
-        if isinstance(name, unicode):
+        if isinstance(name, str):
             u = name
         else:
             try:
@@ -205,7 +205,7 @@ def makeinfo(path, piece_length, progress, name=None, content_type=None, private
             progress(piece_count, num_pieces)
 
         if name is not None:
-            assert isinstance(name, unicode)
+            assert isinstance(name, str)
             name = to_utf8(name)
         else:
             name = to_utf8(os.path.split(path)[1])

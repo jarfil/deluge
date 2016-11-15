@@ -1,15 +1,15 @@
 import tempfile
 from email.utils import formatdate
 
-from twisted.internet import reactor
-from twisted.internet.error import CannotListenError
-from twisted.python.failure import Failure
-from twisted.trial import unittest
-from twisted.web.error import PageRedirect
-from twisted.web.http import NOT_MODIFIED
-from twisted.web.resource import Resource
-from twisted.web.server import Site
-from twisted.web.util import redirectTo
+from .twisted.internet import reactor
+from .twisted.internet.error import CannotListenError
+from .twisted.python.failure import Failure
+from .twisted.trial import unittest
+from .twisted.web.error import PageRedirect
+from .twisted.web.http import NOT_MODIFIED
+from .twisted.web.resource import Resource
+from .twisted.web.server import Site
+from .twisted.web.util import redirectTo
 
 from deluge.httpdownloader import download_file
 from deluge.log import setup_logger
@@ -139,7 +139,7 @@ class DownloadFileTestCase(unittest.TestCase):
     def failIfContains(self, filename, contents):  # NOQA
         with open(filename) as _file:
             try:
-                self.failIfEqual(_file.read(), contents)
+                self.assertNotEqual(_file.read(), contents)
             except Exception as ex:
                 self.fail(ex)
         return filename

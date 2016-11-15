@@ -8,7 +8,7 @@
 #
 
 """Common functions for various parts of Deluge to use."""
-from __future__ import division, print_function
+
 
 import base64
 import functools
@@ -21,8 +21,8 @@ import re
 import subprocess
 import sys
 import time
-import urllib
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+import urllib.parse
 
 import chardet
 import pkg_resources
@@ -97,12 +97,12 @@ def get_default_config_dir(filename=None):
         def save_config_path(resource):
             app_data_path = os.environ.get('APPDATA')
             if not app_data_path:
-                import _winreg
-                hkey = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER,
+                import winreg
+                hkey = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
                                        'Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders')
-                app_data_reg = _winreg.QueryValueEx(hkey, 'AppData')
+                app_data_reg = winreg.QueryValueEx(hkey, 'AppData')
                 app_data_path = app_data_reg[0]
-                _winreg.CloseKey(hkey)
+                winreg.CloseKey(hkey)
             return os.path.join(app_data_path, resource)
     else:
         from xdg.BaseDirectory import save_config_path
@@ -256,7 +256,7 @@ def show_file(path, timestamp=None):
             timestamp = int(time.time())
         startup_id = '%s_%u_%s-dbus_TIME%d' % (os.path.basename(sys.argv[0]), os.getpid(), os.uname()[1], timestamp)
         if DBUS_FILEMAN:
-            paths = [urlparse.urljoin('file:', urllib.pathname2url(utf8_encoded(path)))]
+            paths = [urllib.parse.urljoin('file:', urllib.request.pathname2url(utf8_encoded(path)))]
             DBUS_FILEMAN.ShowItems(paths, startup_id, dbus_interface='org.freedesktop.FileManager1')
         else:
             env = os.environ.copy()
@@ -534,7 +534,7 @@ def parse_human_size(size):
         if len(tokens) == 1:
             return int(tokens[0])
         # Otherwise we expect to find two tokens: A number and a unit.
-        if len(tokens) == 2 and isinstance(tokens[1], basestring):
+        if len(tokens) == 2 and isinstance(tokens[1], str):
             normalized_unit = tokens[1].lower()
             # Try to match the first letter of the unit.
             for unit in size_units:
@@ -638,7 +638,7 @@ def get_magnet_info(uri):
                 else:
                     break
             elif param.startswith(dn_param):
-                name = urllib.unquote_plus(param[len(dn_param):])
+                name = urllib.parse.unquote_plus(param[len(dn_param):])
 
         if info_hash:
             if not name:
@@ -776,8 +776,8 @@ def decode_string(s, encoding='utf8'):
 
     """
     if not s:
-        return u''
-    elif isinstance(s, unicode):
+        return ''
+    elif isinstance(s, str):
         return s
 
     encodings = [lambda: ('utf8', 'strict'),
@@ -793,7 +793,7 @@ def decode_string(s, encoding='utf8'):
             return s.decode(*l())
         except UnicodeDecodeError:
             pass
-    return u''
+    return ''
 
 
 def utf8_encoded(s, encoding='utf8'):
@@ -810,7 +810,7 @@ def utf8_encoded(s, encoding='utf8'):
     """
     if isinstance(s, str):
         s = decode_string(s, encoding).encode('utf8')
-    elif isinstance(s, unicode):
+    elif isinstance(s, str):
         s = s.encode('utf8')
     return s
 
@@ -1010,7 +1010,7 @@ def unicode_argv():
             # Remove Python executable and commands if present
             start = argc.value - len(sys.argv)
             return [argv[i] for i in
-                    xrange(start, argc.value)]
+                    range(start, argc.value)]
     else:
         # On other platforms, we have to find the likely encoding of the args and decode
         # First check if sys.stdout or stdin have encoding set
@@ -1046,8 +1046,8 @@ def run_profiled(func, *args, **kwargs):
                 print('Profile stats saved to %s' % output_file)
             else:
                 import pstats
-                import StringIO
-                strio = StringIO.StringIO()
+                import io
+                strio = io.StringIO()
                 ps = pstats.Stats(profiler, stream=strio).sort_stats('cumulative')
                 ps.print_stats()
                 print(strio.getvalue())

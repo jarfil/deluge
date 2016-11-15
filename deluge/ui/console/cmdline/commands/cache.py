@@ -20,7 +20,7 @@ class Command(BaseCommand):
         self.console = component.get('ConsoleUI')
 
         def on_cache_status(status):
-            for key, value in status.items():
+            for key, value in list(status.items()):
                 self.console.write('{!info!}%s: {!input!}%s' % (key, value))
 
         d = client.core.get_cache_status()

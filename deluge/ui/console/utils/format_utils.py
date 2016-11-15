@@ -81,7 +81,7 @@ def trim_string(string, w, have_dbls):
     if w <= 0:
         return ''
     elif w == 1:
-        return u' '
+        return ' '
     elif have_dbls:
         # have to do this the slow way
         chrs = []
@@ -97,9 +97,9 @@ def trim_string(string, w, have_dbls):
         if width != w:
             chrs.pop()
             chrs.append('.')
-        return u'%s ' % (''.join(chrs))
+        return '%s ' % (''.join(chrs))
     else:
-        return u'%s ' % (string[0:w - 1])
+        return '%s ' % (string[0:w - 1])
 
 
 def format_column(col, lim):
@@ -107,7 +107,7 @@ def format_column(col, lim):
     # Chosen over isinstance(col, unicode) and col.__class__ == unicode
     # for speed - it's ~3 times faster for non-unicode strings and ~1.5
     # for unicode strings.
-    if col.__class__ is unicode:
+    if col.__class__ is str:
         # might have some double width chars
         col = ud_normalize('NFC', col)
         dbls = sum(east_asian_width(c) in 'WF' for c in col)
@@ -240,8 +240,8 @@ def strwidth(string):
     """
     Measure width of a string considering asian double width characters
     """
-    if not isinstance(string, unicode):
-        string = unicode(string, 'utf-8')
+    if not isinstance(string, str):
+        string = str(string, 'utf-8')
     return sum([1 + (east_asian_width(char) in ['W', 'F']) for char in string])
 
 

@@ -11,7 +11,7 @@
 # See LICENSE for more details.
 #
 
-from __future__ import division
+
 
 import logging
 import time
@@ -138,7 +138,7 @@ class Core(CorePluginBase):
 
             # extract the ones we are interested in
             # adding them to the 1s array
-            for stat, stat_list in self.stats[1].iteritems():
+            for stat, stat_list in self.stats[1].items():
                 if stat in stats:
                     stat_list.insert(0, int(stats[stat]))
                 else:
@@ -152,7 +152,7 @@ class Core(CorePluginBase):
                     self.last_update[interval] = update_time
                     self.count[interval] = 0
                     current_stats = self.stats[interval]
-                    for stat, stat_list in self.stats[base].iteritems():
+                    for stat, stat_list in self.stats[base].items():
                         try:
                             avg = mean(stat_list[0:multiplier])
                         except ValueError:
@@ -215,7 +215,7 @@ class Core(CorePluginBase):
     @export
     def set_config(self, config):
         'sets the config dictionary'
-        for key in config.keys():
+        for key in list(config.keys()):
             self.config[key] = config[key]
         self.config.save()
 

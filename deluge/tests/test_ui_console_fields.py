@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from twisted.trial import unittest
+from .twisted.trial import unittest
 
 from deluge.ui.console.widgets.fields import TextInput
 

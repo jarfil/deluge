@@ -106,8 +106,8 @@ class CmdLine(BaseMode, Commander):
         self.display_lines_offset = 0
 
         # Holds the user input and is cleared on 'enter'
-        self.input = u''
-        self.input_incomplete = u''
+        self.input = ''
+        self.input_incomplete = ''
 
         # Keep track of where the cursor is
         self.input_cursor = 0
@@ -233,8 +233,8 @@ class CmdLine(BaseMode, Commander):
                 else:
                     self.input_history.append(self.input)
                 self.input_history_index = len(self.input_history)
-                self.input = u''
-                self.input_incomplete = u''
+                self.input = ''
+                self.input_incomplete = ''
                 self.input_cursor = 0
                 self.stdscr.refresh()
 
@@ -420,7 +420,7 @@ class CmdLine(BaseMode, Commander):
 
             # Write the line
             with open(self.history_file[active_file], 'a') as _file:
-                if isinstance(text, unicode):
+                if isinstance(text, str):
                     text = text.encode(self.encoding)
                 _file.write(text)
                 _file.write(os.linesep)

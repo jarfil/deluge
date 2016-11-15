@@ -7,7 +7,7 @@
 # See LICENSE for more details.
 #
 
-from __future__ import division
+
 
 import logging
 

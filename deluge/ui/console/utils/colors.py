@@ -137,7 +137,7 @@ def get_line_length(line, encoding='UTF-8'):
     if line.count('{!') != line.count('!}'):
         raise BadColorString('Number of {! is not equal to number of !}')
 
-    if isinstance(line, unicode):
+    if isinstance(line, str):
         line = line.encode(encoding, 'replace')
 
     # Remove all the color tags
@@ -156,7 +156,7 @@ def get_line_width(line, encoding='UTF-8'):
     if line.count('{!') != line.count('!}'):
         raise BadColorString('Number of {! is not equal to number of !}')
 
-    if isinstance(line, unicode):
+    if isinstance(line, str):
         line = line.encode(encoding, 'replace')
 
     # Remove all the color tags
@@ -178,7 +178,7 @@ def parse_color_string(s, encoding='UTF-8'):
     if s.count('{!') != s.count('!}'):
         raise BadColorString('Number of {! is not equal to number of !}')
 
-    if isinstance(s, unicode):
+    if isinstance(s, str):
         s = s.encode(encoding, 'replace')
 
     ret = []
@@ -311,6 +311,6 @@ class ConsoleColorFormatter(object):
     def format_colors(self, string):
         def r(repl):
             return lambda s: repl % s.group()
-        for key, replacement in self.replace_dict.items():
+        for key, replacement in list(self.replace_dict.items()):
             string = re.sub(key, r(replacement), string)
         return string

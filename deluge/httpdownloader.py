@@ -10,7 +10,7 @@
 import logging
 import os.path
 import zlib
-from urlparse import urljoin
+from urllib.parse import urljoin
 
 from twisted.internet import reactor
 from twisted.python.failure import Failure
@@ -166,7 +166,7 @@ def _download_file(url, filename, callback=None, headers=None, force_filename=Fa
     url = str(url)
     filename = str(filename)
     if headers:
-        for key, value in headers.items():
+        for key, value in list(headers.items()):
             headers[str(key)] = str(value)
 
     if allow_compression:

@@ -4,7 +4,7 @@
 # the additional special exception to link portions of this program with the OpenSSL library.
 # See LICENSE for more details.
 #
-from __future__ import print_function
+
 
 import pytest
 from twisted.internet import defer
@@ -18,7 +18,7 @@ from deluge.ui.client import client
 
 
 def print_totals(totals):
-    for name, value in totals.iteritems():
+    for name, value in totals.items():
         print(name, fsize(value))
 
     print('overhead:')
@@ -46,10 +46,10 @@ class StatsTestCase(BaseTestCase):
             raise unittest.SkipTest('WebUi plugin not available for testing')
 
         totals = yield client.stats.get_totals()
-        self.assertEquals(totals['total_upload'], 0)
-        self.assertEquals(totals['total_payload_upload'], 0)
-        self.assertEquals(totals['total_payload_download'], 0)
-        self.assertEquals(totals['total_download'], 0)
+        self.assertEqual(totals['total_upload'], 0)
+        self.assertEqual(totals['total_payload_upload'], 0)
+        self.assertEqual(totals['total_payload_download'], 0)
+        self.assertEqual(totals['total_download'], 0)
         # print_totals(totals)
 
     @defer.inlineCallbacks
@@ -59,10 +59,10 @@ class StatsTestCase(BaseTestCase):
             raise unittest.SkipTest('WebUi plugin not available for testing')
 
         totals = yield client.stats.get_session_totals()
-        self.assertEquals(totals['total_upload'], 0)
-        self.assertEquals(totals['total_payload_upload'], 0)
-        self.assertEquals(totals['total_payload_download'], 0)
-        self.assertEquals(totals['total_download'], 0)
+        self.assertEqual(totals['total_upload'], 0)
+        self.assertEqual(totals['total_payload_upload'], 0)
+        self.assertEqual(totals['total_payload_download'], 0)
+        self.assertEqual(totals['total_download'], 0)
         # print_totals(totals)
 
     @pytest.mark.gtkui

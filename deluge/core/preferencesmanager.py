@@ -371,8 +371,8 @@ class PreferencesManager(component.Component):
                 now = time.time()
                 # check if we've done this within the last week or never
                 if (now - self.config['info_sent']) >= (60 * 60 * 24 * 7):
-                    from urllib import quote_plus
-                    from urllib2 import urlopen
+                    from urllib.parse import quote_plus
+                    from urllib.request import urlopen
                     import platform
                     try:
                         url = 'http://deluge-torrent.org/stats_get.php?processor=' + \

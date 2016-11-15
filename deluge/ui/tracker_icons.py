@@ -9,9 +9,9 @@
 
 import logging
 import os
-from HTMLParser import HTMLParseError, HTMLParser
+from html.parser import HTMLParseError, HTMLParser
 from tempfile import mkstemp
-from urlparse import urljoin, urlparse
+from urllib.parse import urljoin, urlparse
 
 from twisted.internet import defer, threads
 from twisted.web.error import PageRedirect

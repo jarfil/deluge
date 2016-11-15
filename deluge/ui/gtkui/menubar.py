@@ -409,7 +409,7 @@ class MenuBar(component.Component):
             'menuitem_max_connections': client.core.set_torrent_max_connections,
             'menuitem_upload_slots': client.core.set_torrent_max_upload_slots
         }
-        if widget.get_name() in funcs.keys():
+        if widget.get_name() in list(funcs.keys()):
             for torrent in component.get('TorrentView').get_selected_torrents():
                 funcs[widget.get_name()](torrent, -1)
 
@@ -492,7 +492,7 @@ class MenuBar(component.Component):
         known_accounts_to_log = []
         for account in known_accounts:
             account_to_log = {}
-            for key, value in account.copy().iteritems():
+            for key, value in account.copy().items():
                 if key == 'password':
                     value = '*' * len(value)
                 account_to_log[key] = value
@@ -535,7 +535,7 @@ class MenuBar(component.Component):
             return
 
         torrent_owner = component.get('TorrentView').get_torrent_status(selected[0])['owner']
-        for username, item in self.change_owner_submenu_items.iteritems():
+        for username, item in self.change_owner_submenu_items.items():
             item.set_active(username == torrent_owner)
 
     def _on_change_owner_toggled(self, widget, username):

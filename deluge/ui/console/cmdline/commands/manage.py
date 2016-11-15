@@ -59,12 +59,12 @@ class Command(BaseCommand):
     def _get_option(self, options):
 
         def on_torrents_status(status):
-            for torrentid, data in status.items():
+            for torrentid, data in list(status.items()):
                 self.console.write('')
                 if 'name' in data:
                     self.console.write('{!info!}Name: {!input!}%s' % data.get('name'))
                 self.console.write('{!info!}ID: {!input!}%s' % torrentid)
-                for k, v in data.items():
+                for k, v in list(data.items()):
                     if k != 'name':
                         self.console.write('{!info!}%s: {!input!}%s' % (k, v))
 
@@ -80,7 +80,7 @@ class Command(BaseCommand):
                 return
             request_options.append(opt)
         if not request_options:
-            request_options = [opt for opt in torrent_options.keys()]
+            request_options = [opt for opt in list(torrent_options.keys())]
         request_options.append('name')
 
         d = client.core.get_torrents_status({'id': torrent_ids}, request_options)

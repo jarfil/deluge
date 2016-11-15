@@ -8,7 +8,7 @@
 # See LICENSE for more details.
 #
 
-from __future__ import division
+
 
 import base64
 import glob
@@ -201,7 +201,8 @@ class Core(component.Component):
 
     def get_new_release(self):
         log.debug('get_new_release')
-        from urllib2 import urlopen, URLError
+        from urllib.request import urlopen
+        from urllib.error import URLError
         try:
             self.new_release = urlopen('http://download.deluge-torrent.org/version-1.0').read().strip()
         except URLError as ex:
@@ -523,7 +524,7 @@ class Core(component.Component):
             status_dict, plugin_keys = args
             # Ask the plugin manager to fill in the plugin keys
             if len(plugin_keys) > 0:
-                for key in status_dict.keys():
+                for key in list(status_dict.keys()):
                     status_dict[key].update(self.pluginmanager.get_status(key, plugin_keys))
             return status_dict
         d.addCallback(add_plugin_fields)
@@ -562,7 +563,7 @@ class Core(component.Component):
     def set_config(self, config):
         """Set the config with values from dictionary"""
         # Load all the values into the configuration
-        for key in config.keys():
+        for key in list(config.keys()):
             if self.read_only_config_keys and key in self.read_only_config_keys:
                 continue
             self.config[key] = config[key]
@@ -715,7 +716,7 @@ class Core(component.Component):
         """
         if not self.authmanager.has_account(username):
             raise DelugeError('Username "%s" is not known.' % username)
-        if isinstance(torrent_ids, basestring):
+        if isinstance(torrent_ids, str):
             torrent_ids = [torrent_ids]
         for torrent_id in torrent_ids:
             self.torrentmanager[torrent_id].set_owner(username)

@@ -227,9 +227,9 @@ class TorrentView(InputKeyHandler):
 
             # Get first element so we can check if it has given field
             # and if it's a string
-            first_element = state[state.keys()[0]]
+            first_element = state[list(state.keys())[0]]
             if field in first_element:
-                is_string = isinstance(first_element[field], basestring)
+                is_string = isinstance(first_element[field], str)
 
                 def sort_key(s):
                     return state.get(s)[field]
@@ -341,7 +341,7 @@ class TorrentView(InputKeyHandler):
             self.config.save()
 
         self.cols_to_show = [col for col in sorted(self.config['torrentview']['columns'],
-                                                   key=lambda (k): self.config['torrentview']['columns'][k]['order'])
+                                                   key=lambda k: self.config['torrentview']['columns'][k]['order'])
                              if self.config['torrentview']['columns'][col]['visible']]
         self.status_fields = get_required_fields(self.cols_to_show)
 
@@ -444,9 +444,9 @@ class TorrentView(InputKeyHandler):
         elif c == ord('M'):
             if self.last_mark >= 0:
                 if self.cursel > self.last_mark:
-                    mrange = range(self.last_mark, self.cursel + 1)
+                    mrange = list(range(self.last_mark, self.cursel + 1))
                 else:
-                    mrange = range(self.cursel, self.last_mark)
+                    mrange = list(range(self.cursel, self.last_mark))
                 self.add_marked(mrange, self.cursel)
                 affected_lines = mrange
             else:

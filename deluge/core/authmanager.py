@@ -29,7 +29,7 @@ AUTH_LEVELS_MAPPING = {
 }
 
 AUTH_LEVELS_MAPPING_REVERSE = {}
-for key, value in AUTH_LEVELS_MAPPING.iteritems():
+for key, value in AUTH_LEVELS_MAPPING.items():
     AUTH_LEVELS_MAPPING_REVERSE[value] = key
 
 
@@ -122,7 +122,7 @@ class AuthManager(component.Component):
     def get_known_accounts(self):
         """Returns a list of known deluge usernames."""
         self.__load_auth_file()
-        return [account.data() for account in self.__auth.values()]
+        return [account.data() for account in list(self.__auth.values())]
 
     def create_account(self, username, password, authlevel):
         if username in self.__auth:
@@ -181,7 +181,7 @@ class AuthManager(component.Component):
             log.info('Saving the %s at: %s', filename, filepath)
             try:
                 with open(filepath_tmp, 'wb') as _file:
-                    for account in self.__auth.values():
+                    for account in list(self.__auth.values()):
                         _file.write('%(username)s:%(password)s:%(authlevel_int)s\n' % account.data())
                     _file.flush()
                     os.fsync(_file.fileno())

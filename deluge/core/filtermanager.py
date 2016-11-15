@@ -130,8 +130,8 @@ class FilterManager(component.Component):
             return self.torrents.get_torrent_list()
 
         # Sanitize input: filter-value must be a list of strings
-        for key, value in filter_dict.items():
-            if isinstance(value, basestring):
+        for key, value in list(filter_dict.items()):
+            if isinstance(value, str):
                 filter_dict[key] = [value]
 
         # Optimized filter for id
@@ -160,7 +160,7 @@ class FilterManager(component.Component):
             return torrent_ids
 
         # Registered filters
-        for field, values in filter_dict.items():
+        for field, values in list(filter_dict.items()):
             if field in self.registered_filters:
                 # Filters out doubles
                 torrent_ids = list(set(self.registered_filters[field](torrent_ids, values)))
@@ -169,11 +169,11 @@ class FilterManager(component.Component):
         if not filter_dict:
             return torrent_ids
 
-        torrent_keys, plugin_keys = self.torrents.separate_keys(filter_dict.keys(), torrent_ids)
+        torrent_keys, plugin_keys = self.torrents.separate_keys(list(filter_dict.keys()), torrent_ids)
         # Leftover filter arguments, default filter on status fields.
         for torrent_id in list(torrent_ids):
             status = self.core.create_torrent_status(torrent_id, torrent_keys, plugin_keys)
-            for field, values in filter_dict.iteritems():
+            for field, values in filter_dict.items():
                 if field in status and status[field] in values:
                     continue
                 elif torrent_id in torrent_ids:
@@ -212,7 +212,7 @@ class FilterManager(component.Component):
         # Return a dict of tuples:
         sorted_items = {}
         for field in tree_keys:
-            sorted_items[field] = sorted(items[field].iteritems())
+            sorted_items[field] = sorted(items[field].items())
 
         if 'state' in tree_keys:
             sorted_items['state'].sort(self._sort_state_items)
@@ -251,7 +251,7 @@ class FilterManager(component.Component):
 
     def _hide_state_items(self, state_items):
         """For hide(show)-zero hits"""
-        for (value, count) in state_items.items():
+        for (value, count) in list(state_items.items()):
             if value != 'All' and count == 0:
                 del state_items[value]
 

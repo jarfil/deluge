@@ -81,7 +81,7 @@ def format_request(call):
         if call[3]:
             if call[2]:
                 s += ', '
-            s += ', '.join([key + '=' + str(value) for key, value in call[3].items()])
+            s += ', '.join([key + '=' + str(value) for key, value in list(call[3].items())])
         s += ')'
     except UnicodeEncodeError:
         return 'UnicodeEncodeError, call: %s' % call
@@ -404,7 +404,7 @@ class RPCServer(component.Component):
         :param obj: the object that was previously registered
 
         """
-        for key, value in self.factory.methods.items():
+        for key, value in list(self.factory.methods.items()):
             if value.__self__ == obj:
                 del self.factory.methods[key]
 
@@ -429,7 +429,7 @@ class RPCServer(component.Component):
         :returns: the exported methods
         :rtype: list
         """
-        return self.factory.methods.keys()
+        return list(self.factory.methods.keys())
 
     def get_session_id(self):
         """
@@ -500,7 +500,7 @@ class RPCServer(component.Component):
         """
         log.debug('intevents: %s', self.factory.interested_events)
         # Find sessions interested in this event
-        for session_id, interest in self.factory.interested_events.items():
+        for session_id, interest in list(self.factory.interested_events.items()):
             if event.name in interest:
                 log.debug('Emit Event: %s %s', event.name, event.args)
                 # This session is interested so send a RPC_EVENT

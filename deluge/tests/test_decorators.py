@@ -1,4 +1,4 @@
-from twisted.trial import unittest
+from .twisted.trial import unittest
 
 from deluge.decorators import proxy
 

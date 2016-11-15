@@ -272,7 +272,7 @@ class ComponentRegistry(object):
             Deferred: a deferred object that will fire once the Component has been sucessfully deregistered
 
         """
-        if obj in self.components.values():
+        if obj in list(self.components.values()):
             log.debug('Deregistering Component: %s', obj._component_name)
             d = self.stop([obj._component_name])
 
@@ -298,7 +298,7 @@ class ComponentRegistry(object):
         """
         # Start all the components if names is empty
         if not names:
-            names = self.components.keys()
+            names = list(self.components.keys())
         elif isinstance(names, str):
             names = [names]
 
@@ -332,7 +332,7 @@ class ComponentRegistry(object):
 
         """
         if not names:
-            names = self.components.keys()
+            names = list(self.components.keys())
         elif isinstance(names, str):
             names = [names]
 
@@ -370,7 +370,7 @@ class ComponentRegistry(object):
 
         """
         if not names:
-            names = self.components.keys()
+            names = list(self.components.keys())
         elif isinstance(names, str):
             names = [names]
 
@@ -396,7 +396,7 @@ class ComponentRegistry(object):
 
         """
         if not names:
-            names = self.components.keys()
+            names = list(self.components.keys())
         elif isinstance(names, str):
             names = [names]
 
@@ -419,13 +419,13 @@ class ComponentRegistry(object):
 
         """
         def on_stopped(result):
-            return DeferredList([comp._component_shutdown() for comp in self.components.values()])
+            return DeferredList([comp._component_shutdown() for comp in list(self.components.values())])
 
-        return self.stop(self.components.keys()).addCallback(on_stopped)
+        return self.stop(list(self.components.keys())).addCallback(on_stopped)
 
     def update(self):
         """Update all Components that are in a Started state."""
-        for component in self.components.items():
+        for component in list(self.components.items()):
             try:
                 component.update()
             except BaseException as ex:

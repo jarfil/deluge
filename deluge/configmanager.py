@@ -79,7 +79,7 @@ class _ConfigManager(object):
 
     def save(self):
         """Saves all the configs to disk."""
-        for value in self.config_files.values():
+        for value in list(self.config_files.values()):
             value.save()
         # We need to return True to keep the timer active
         return True
@@ -88,7 +88,7 @@ class _ConfigManager(object):
         """Get a reference to the Config object for this filename"""
         log.debug("Getting config '%s'", config_file)
         # Create the config object if not already created
-        if config_file not in self.config_files.keys():
+        if config_file not in list(self.config_files.keys()):
             self.config_files[config_file] = Config(config_file, defaults,
                                                     config_dir=self.config_directory,
                                                     file_version=file_version)

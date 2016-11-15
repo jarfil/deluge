@@ -7,7 +7,7 @@
 # See LICENSE for more details.
 #
 
-from twisted.internet import reactor
+from .twisted.internet import reactor
 
 import deluge.common
 import deluge.component as component

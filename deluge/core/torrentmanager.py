@@ -9,7 +9,7 @@
 
 """TorrentManager handles Torrent objects"""
 
-import cPickle
+import pickle
 import datetime
 import logging
 import operator
@@ -71,7 +71,7 @@ class TorrentState:  # pylint: disable=old-style-class
                  priority=0,
                  name=None):
         # Build the class atrribute list from args
-        for key, value in locals().items():
+        for key, value in list(locals().items()):
             if key == 'self':
                 continue
             setattr(self, key, value)
@@ -231,7 +231,7 @@ class TorrentManager(component.Component):
             os.remove(self.temp_file)
 
     def update(self):
-        for torrent_id, torrent in self.torrents.items():
+        for torrent_id, torrent in list(self.torrents.items()):
             # XXX: Should the state check be those that _can_ be stopped at ratio
             if torrent.options['stop_at_ratio'] and torrent.state not in (
                     'Checking', 'Allocating', 'Paused', 'Queued'):
@@ -266,7 +266,7 @@ class TorrentManager(component.Component):
             list: A list of torrent_ids.
 
         """
-        torrent_ids = self.torrents.keys()
+        torrent_ids = list(self.torrents.keys())
         if component.get('RPCServer').get_session_auth_level() == AUTH_LEVEL_ADMIN:
             return torrent_ids
 
@@ -361,7 +361,7 @@ class TorrentManager(component.Component):
 
         # Check for renamed files and if so, rename them in the torrent_info before adding.
         if options['mapped_files'] and torrent_info:
-            for index, fname in options['mapped_files'].items():
+            for index, fname in list(options['mapped_files'].items()):
                 fname = sanitize_filepath(decode_string(fname))
                 log.debug('renaming file index %s to %s', index, fname)
                 try:
@@ -555,8 +555,8 @@ class TorrentManager(component.Component):
             log.info('Loading torrent state: %s', filepath)
             try:
                 with open(filepath, 'rb') as _file:
-                    state = cPickle.load(_file)
-            except (IOError, EOFError, cPickle.UnpicklingError) as ex:
+                    state = pickle.load(_file)
+            except (IOError, EOFError, pickle.UnpicklingError) as ex:
                 log.warning('Unable to load %s: %s', filepath, ex)
                 state = None
             else:
@@ -627,7 +627,7 @@ class TorrentManager(component.Component):
         """
         state = TorrentManagerState()
         # Create the state for each Torrent and append to the list
-        for torrent in self.torrents.values():
+        for torrent in list(self.torrents.values()):
             if self.session.is_paused():
                 paused = torrent.handle.is_paused()
             elif torrent.forced_error:
@@ -703,10 +703,10 @@ class TorrentManager(component.Component):
         try:
             log.debug('Creating the temporary file: %s', filepath_tmp)
             with open(filepath_tmp, 'wb', 0) as _file:
-                cPickle.dump(state, _file)
+                pickle.dump(state, _file)
                 _file.flush()
                 os.fsync(_file.fileno())
-        except (OSError, cPickle.PicklingError) as ex:
+        except (OSError, pickle.PicklingError) as ex:
             log.error('Unable to save %s: %s', filename, ex)
             return
 
@@ -743,7 +743,7 @@ class TorrentManager(component.Component):
 
         """
         if torrent_ids is None:
-            torrent_ids = (t[0] for t in self.torrents.iteritems() if t[1].handle.need_save_resume_data())
+            torrent_ids = (t[0] for t in self.torrents.items() if t[1].handle.need_save_resume_data())
 
         def on_torrent_resume_save(dummy_result, torrent_id):
             """Recieved torrent resume_data alert so remove from waiting list"""
@@ -915,7 +915,7 @@ class TorrentManager(component.Component):
 
     def cleanup_torrents_prev_status(self):
         """Run cleanup_prev_status for each registered torrent"""
-        for torrent in self.torrents.iteritems():
+        for torrent in self.torrents.items():
             torrent[1].cleanup_prev_status()
 
     def on_set_max_connections_per_torrent(self, key, value):
@@ -1315,7 +1315,7 @@ class TorrentManager(component.Component):
         if self.torrents:
             for torrent_id in torrent_ids:
                 if torrent_id in self.torrents:
-                    status_keys = self.torrents[torrent_id].status_funcs.keys()
+                    status_keys = list(self.torrents[torrent_id].status_funcs.keys())
                     leftover_keys = list(set(keys) - set(status_keys))
                     torrent_keys = list(set(keys) - set(leftover_keys))
                     return torrent_keys, leftover_keys

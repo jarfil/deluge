@@ -68,7 +68,7 @@ __all__ = ['dumps', 'loads']
 py3 = sys.version_info[0] >= 3
 if py3:
     long = int  # pylint: disable=redefined-builtin
-    unicode = str  # pylint: disable=redefined-builtin
+    str = str  # pylint: disable=redefined-builtin
 
     def int2byte(c):
         return bytes([c])
@@ -130,7 +130,7 @@ def decode_int(x, f):
     try:
         n = int(x[f:newf])
     except (OverflowError, ValueError):
-        n = long(x[f:newf])
+        n = int(x[f:newf])
     if x[f:f + 1] == '-':
         if x[f + 1:f + 2] == '0':
             raise ValueError
@@ -177,7 +177,7 @@ def decode_string(x, f):
     try:
         n = int(x[f:colon])
     except (OverflowError, ValueError):
-        n = long(x[f:colon])
+        n = int(x[f:colon])
     if x[f] == '0' and colon != f + 1:
         raise ValueError
     colon += 1
@@ -376,25 +376,25 @@ def encode_list(x, r):
 def encode_dict(x, r):
     if len(x) < DICT_FIXED_COUNT:
         r.append(int2byte(DICT_FIXED_START + len(x)))
-        for k, v in x.items():
+        for k, v in list(x.items()):
             encode_func[type(k)](k, r)
             encode_func[type(v)](v, r)
     else:
         r.append(CHR_DICT)
-        for k, v in x.items():
+        for k, v in list(x.items()):
             encode_func[type(k)](k, r)
             encode_func[type(v)](v, r)
         r.append(CHR_TERM)
 
 encode_func = {}
 encode_func[int] = encode_int
-encode_func[long] = encode_int
+encode_func[int] = encode_int
 encode_func[bytes] = encode_string
 encode_func[list] = encode_list
 encode_func[tuple] = encode_list
 encode_func[dict] = encode_dict
 encode_func[type(None)] = encode_none
-encode_func[unicode] = encode_unicode
+encode_func[str] = encode_unicode
 encode_func[bool] = encode_bool
 
 lock = Lock()
@@ -426,15 +426,15 @@ def test():
            tuple(range(-100000, 100000)), b'b' * 31, b'b' * 62, b'b' * 64, 2**30, 2**33, 2**62,
            2**64, 2**30, 2**33, 2**62, 2**64, False, False, True, -1, 2, 0),)
     assert loads(dumps(ld)) == ld
-    d = dict(zip(range(-100000, 100000), range(-100000, 100000)))
+    d = dict(list(zip(list(range(-100000, 100000)), list(range(-100000, 100000)))))
     d.update({b'a': 20, 20: 40, 40: 41, f1: f2, f2: f3, f3: False, False: True, True: False})
     ld = (d, {}, {5: 6}, {7: 7, True: 8}, {9: 10, 22: 39, 49: 50, 44: b''})
     assert loads(dumps(ld)) == ld
     ld = (b'', b'a' * 10, b'a' * 100, b'a' * 1000, b'a' * 10000, b'a' * 100000, b'a' * 1000000, b'a' * 10000000)
     assert loads(dumps(ld)) == ld
-    ld = tuple([dict(zip(range(n), range(n))) for n in range(100)]) + (b'b',)
+    ld = tuple([dict(list(zip(list(range(n)), list(range(n))))) for n in range(100)]) + (b'b',)
     assert loads(dumps(ld)) == ld
-    ld = tuple([dict(zip(range(n), range(-n, 0))) for n in range(100)]) + (b'b',)
+    ld = tuple([dict(list(zip(list(range(n)), list(range(-n, 0))))) for n in range(100)]) + (b'b',)
     assert loads(dumps(ld)) == ld
     ld = tuple([tuple(range(n)) for n in range(100)]) + (b'b',)
     assert loads(dumps(ld)) == ld

@@ -1,7 +1,7 @@
 import warnings
 
-from twisted.internet.defer import maybeDeferred
-from twisted.trial import unittest
+from .twisted.internet.defer import maybeDeferred
+from .twisted.trial import unittest
 
 import deluge.component as component
 

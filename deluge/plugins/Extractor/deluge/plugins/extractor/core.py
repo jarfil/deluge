@@ -38,14 +38,14 @@ if windows_check():
         'C:\\Program Files (x86)\\7-Zip\\7z.exe',
     ]
 
-    import _winreg
+    import winreg
     try:
-        hkey = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER, 'Software\\7-Zip')
+        hkey = winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Software\\7-Zip')
     except WindowsError:
         pass
     else:
-        win_7z_path = os.path.join(_winreg.QueryValueEx(hkey, 'Path')[0], '7z.exe')
-        _winreg.CloseKey(hkey)
+        win_7z_path = os.path.join(winreg.QueryValueEx(hkey, 'Path')[0], '7z.exe')
+        winreg.CloseKey(hkey)
         win_7z_exes.insert(1, win_7z_path)
 
     switch_7z = 'x -y'
@@ -85,7 +85,7 @@ else:
     # Test command exists and if not, remove.
     for command in required_cmds:
         if not which(command):
-            for k, v in EXTRACT_COMMANDS.items():
+            for k, v in list(EXTRACT_COMMANDS.items()):
                 if command in v[0]:
                     log.warning('%s not found, disabling support for %s', command, k)
                     del EXTRACT_COMMANDS[k]
@@ -157,7 +157,7 @@ class Core(CorePluginBase):
     @export
     def set_config(self, config):
         'sets the config dictionary'
-        for key in config.keys():
+        for key in list(config.keys()):
             self.config[key] = config[key]
         self.config.save()
 

@@ -116,7 +116,7 @@ class ListView(object):
 
         def set_col_attributes(self, renderer, add=True, **kw):
             if add is True:
-                for attr, value in kw.iteritems():
+                for attr, value in kw.items():
                     self.add_attribute(renderer, attr, value)
             else:
                 self.set_attributes(renderer, **kw)
@@ -234,7 +234,7 @@ class ListView(object):
         return cmp(model[iter1][data], model[iter2][data])
 
     def set_sort_functions(self):
-        for column in self.columns.values():
+        for column in list(self.columns.values()):
             sort_func = column.sort_func or self.generic_sort_func
             self.model_filter.set_sort_func(
                 column.sort_id,
@@ -295,7 +295,7 @@ class ListView(object):
 
     def get_column_name(self, index):
         """Get the header name for a liststore column index"""
-        for key, value in self.columns.items():
+        for key, value in list(self.columns.items()):
             if index in value.column_indices:
                 return key
 
@@ -319,7 +319,7 @@ class ListView(object):
         try:
             self.columns[name].column.set_visible(widget.get_active())
         except KeyError:
-            self.columns[unicode(name)].column.set_visible(widget.get_active())
+            self.columns[str(name)].column.set_visible(widget.get_active())
         return
 
     def on_treeview_header_right_clicked(self, column, event):
@@ -440,7 +440,7 @@ class ListView(object):
         self.column_index.remove(header)
         # Shift the column_indices values of those columns affected by the
         # removal. Any column_indices > the one removed.
-        for column in self.columns.values():
+        for column in list(self.columns.values()):
             if column.column_indices[0] > column_indices[0]:
                 # We need to shift this column_indices
                 for i, index in enumerate(column.column_indices):

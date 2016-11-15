@@ -7,17 +7,17 @@
 # See LICENSE for more details.
 #
 
-from __future__ import print_function
+
 
 import os
 import sys
 import tempfile
 import traceback
 
-from twisted.internet import defer, protocol, reactor
-from twisted.internet.defer import Deferred
-from twisted.internet.error import CannotListenError
-from twisted.trial import unittest
+from .twisted.internet import defer, protocol, reactor
+from .twisted.internet.defer import Deferred
+from .twisted.internet.error import CannotListenError
+from .twisted.trial import unittest
 
 import deluge.configmanager
 import deluge.core.preferencesmanager

@@ -12,7 +12,7 @@
 # See LICENSE for more details.
 #
 
-from __future__ import division
+
 
 import logging
 
@@ -129,7 +129,7 @@ class GraphsTab(Tab):
         return False
 
     def update(self):
-        d1 = client.stats.get_stats(self.graph.stat_info.keys(), self.selected_interval)
+        d1 = client.stats.get_stats(list(self.graph.stat_info.keys()), self.selected_interval)
         d1.addCallback(self.graph.set_stats)
 
         def _update_complete(result):
@@ -240,9 +240,9 @@ class GtkUI(GtkPluginBase):
     def on_apply_prefs(self):
         log.debug('applying prefs for Stats')
         gtkconf = {}
-        for graph, colors in self.config['colors'].items():
+        for graph, colors in list(self.config['colors'].items()):
             gtkconf[graph] = {}
-            for value, color in colors.items():
+            for value, color in list(colors.items()):
                 try:
                     color_btn = self.glade.get_widget('%s_%s_color' % (graph, value))
                     gtkconf[graph][value] = str(color_btn.get_color())
@@ -255,8 +255,8 @@ class GtkUI(GtkPluginBase):
         client.stats.set_config(config)
 
     def on_show_prefs(self):
-        for graph, colors in self.config['colors'].items():
-            for value, color in colors.items():
+        for graph, colors in list(self.config['colors'].items()):
+            for value, color in list(colors.items()):
                 try:
                     color_btn = self.glade.get_widget('%s_%s_color' % (graph, value))
                     color_btn.set_color(gtk.gdk.Color(color))

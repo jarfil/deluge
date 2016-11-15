@@ -85,7 +85,7 @@ class TorrentViewColumns(InputPopup):
         elif not state_changed:
             return
 
-        for key, value in data.items():
+        for key, value in list(data.items()):
             self.torrentview.config['torrentview']['columns'][key]['visible'] = value['value']
             self.torrentview.config['torrentview']['columns'][key]['order'] = value['order']
 

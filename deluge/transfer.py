@@ -8,7 +8,7 @@
 #
 
 try:
-    import rencode  # pylint: disable=useless-suppression,relative-import
+    from . import rencode  # pylint: disable=useless-suppression,relative-import
 except ImportError:
     import deluge.rencode as rencode
 

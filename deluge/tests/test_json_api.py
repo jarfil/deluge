@@ -10,9 +10,9 @@
 import json as json_lib
 
 from mock import MagicMock
-from twisted.internet import defer
-from twisted.web import server
-from twisted.web.http import Request
+from .twisted.internet import defer
+from .twisted.web import server
+from .twisted.web.http import Request
 
 import deluge.common
 import deluge.component as component
@@ -61,7 +61,7 @@ class JSONTestCase(JSONBase):
     def test_get_remote_methods(self):
         json = JSON()
         methods = yield json.get_remote_methods()
-        self.assertEquals(type(methods), tuple)
+        self.assertEqual(type(methods), tuple)
         self.assertTrue(len(methods) > 0)
 
     def test_render_fail_disconnected(self):
@@ -70,7 +70,7 @@ class JSONTestCase(JSONBase):
         request.method = 'POST'
         request._disconnected = True
         # When disconnected, returns empty string
-        self.assertEquals(json.render(request), '')
+        self.assertEqual(json.render(request), '')
 
     def test_render_fail(self):
         json = JSON()
@@ -84,15 +84,15 @@ class JSONTestCase(JSONBase):
         def write(response_str):
             request.write_was_called = True
             response = json_lib.loads(response_str)
-            self.assertEquals(response['result'], None)
-            self.assertEquals(response['id'], None)
-            self.assertEquals(response['error']['message'], 'JSONException: JSON not decodable')
-            self.assertEquals(response['error']['code'], 5)
+            self.assertEqual(response['result'], None)
+            self.assertEqual(response['id'], None)
+            self.assertEqual(response['error']['message'], 'JSONException: JSON not decodable')
+            self.assertEqual(response['error']['code'], 5)
 
         request.write = write
         request.write_was_called = False
         request._disconnected = False
-        self.assertEquals(json.render(request), server.NOT_DONE_YET)
+        self.assertEqual(json.render(request), server.NOT_DONE_YET)
         self.assertTrue(request.write_was_called)
 
     def test_handle_request_invalid_method(self):
@@ -101,7 +101,7 @@ class JSONTestCase(JSONBase):
         json_data = {'method': 'no-existing-module.test', 'id': 0, 'params': []}
         request.json = json_lib.dumps(json_data)
         request_id, result, error = json._handle_request(request)
-        self.assertEquals(error, {'message': 'Unknown method', 'code': 2})
+        self.assertEqual(error, {'message': 'Unknown method', 'code': 2})
 
     def test_handle_request_invalid_json_request(self):
         json = JSON()
@@ -136,7 +136,7 @@ class JSONCustomUserTestCase(JSONBase):
         json_data = {'method': 'core.get_libtorrent_version', 'id': 0, 'params': []}
         request.json = json_lib.dumps(json_data)
         request_id, result, error = json._handle_request(request)
-        self.assertEquals(error, {'message': 'Not authenticated', 'code': 1})
+        self.assertEqual(error, {'message': 'Not authenticated', 'code': 1})
 
 
 class RPCRaiseDelugeErrorJSONTestCase(JSONBase):
@@ -175,14 +175,14 @@ class RPCRaiseDelugeErrorJSONTestCase(JSONBase):
         self.assertTrue('testclass.test' in methods)
 
         request = MagicMock()
-        request.getCookie = MagicMock(return_value=auth.config['sessions'].keys()[0])
+        request.getCookie = MagicMock(return_value=list(auth.config['sessions'].keys())[0])
         json_data = {'method': 'testclass.test', 'id': 0, 'params': []}
         request.json = json_lib.dumps(json_data)
         request_id, result, error = json._handle_request(request)
         result.addCallback(self.fail)
 
         def on_error(error):
-            self.assertEquals(error.type, DelugeError)
+            self.assertEqual(error.type, DelugeError)
         result.addErrback(on_error)
         yield result
 
@@ -206,7 +206,7 @@ class JSONRequestFailedTestCase(JSONBase, WebServerMockBase):
     test = TestClass()
     daemon.rpcserver.register_object(test)
 """
-        from twisted.internet.defer import Deferred
+        from .twisted.internet.defer import Deferred
         extra_callback = {'deferred': Deferred(), 'types': ['stderr'],
                           'timeout': 10,
                           'triggers': [{'expr': 'in test_raise_error',
@@ -240,12 +240,12 @@ class JSONRequestFailedTestCase(JSONBase, WebServerMockBase):
         def write(response_str):
             request.write_was_called = True
             response = json_lib.loads(response_str)
-            self.assertEquals(response['result'], None, 'BAD RESULT')
-            self.assertEquals(response['id'], 0)
-            self.assertEquals(response['error']['message'],
+            self.assertEqual(response['result'], None, 'BAD RESULT')
+            self.assertEqual(response['id'], 0)
+            self.assertEqual(response['error']['message'],
                               'Failure: [Failure instance: Traceback (failure with no frames):'
                               " <class 'deluge.error.DelugeError'>: DelugeERROR\n]")
-            self.assertEquals(response['error']['code'], 4)
+            self.assertEqual(response['error']['code'], 4)
 
         request.write = write
         request.write_was_called = False
@@ -255,7 +255,7 @@ class JSONRequestFailedTestCase(JSONBase, WebServerMockBase):
         d = json._on_json_request(request)
 
         def on_success(arg):
-            self.assertEquals(arg, server.NOT_DONE_YET)
+            self.assertEqual(arg, server.NOT_DONE_YET)
             return True
         d.addCallbacks(on_success, self.fail)
         yield d

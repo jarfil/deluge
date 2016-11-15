@@ -1,10 +1,10 @@
-from __future__ import print_function
+
 
 import os.path
 
 import pytest
-from twisted.internet import defer
-from twisted.internet.error import CannotListenError
+from .twisted.internet import defer
+from .twisted.internet.error import CannotListenError
 
 import deluge.component as component
 

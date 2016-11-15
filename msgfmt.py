@@ -25,7 +25,7 @@ Options:
     --version
         Display version information and exit.
 """
-from __future__ import print_function
+
 
 import array
 import ast
@@ -61,7 +61,7 @@ def generate():
     """
     Return the generated output.
     """
-    keys = MESSAGES.keys()
+    keys = list(MESSAGES.keys())
     # the keys are sorted in the .mo file
     keys.sort()
     offsets = []

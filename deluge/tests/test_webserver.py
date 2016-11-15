@@ -8,13 +8,13 @@
 #
 
 import json as json_lib
-from StringIO import StringIO
+from io import StringIO
 
-import twisted.web.client
-from twisted.internet import defer, reactor
-from twisted.trial.unittest import SkipTest
-from twisted.web.client import Agent, FileBodyProducer
-from twisted.web.http_headers import Headers
+from . import twisted.web.client
+from .twisted.internet import defer, reactor
+from .twisted.trial.unittest import SkipTest
+from .twisted.web.client import Agent, FileBodyProducer
+from .twisted.web.http_headers import Headers
 
 from . import common
 from .common import get_test_data_file

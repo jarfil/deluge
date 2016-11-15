@@ -21,8 +21,8 @@ def Zipped(reader):  # NOQA: N802
             f = z.open(z.namelist()[0])
         else:
             # Handle python 2.5
-            import cStringIO
-            f = cStringIO.StringIO(z.read(z.namelist()[0]))
+            import io
+            f = io.StringIO(z.read(z.namelist()[0]))
         return f
     reader.open = open
     return reader

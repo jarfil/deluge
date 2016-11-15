@@ -8,7 +8,7 @@
 # See LICENSE for more details.
 #
 
-import cStringIO
+import io
 import logging
 import tokenize
 
@@ -56,7 +56,7 @@ def atom(src, token):
 def simple_eval(source):
     """ evaluates the 'source' string into a combination of primitive python objects
     taken from http://effbot.org/zone/simple-iterator-parser.htm"""
-    src = cStringIO.StringIO(source).readline
+    src = io.StringIO(source).readline
     src = tokenize.generate_tokens(src)
     src = (token for token in src if token[0] is not tokenize.NL)
     res = atom(src, next(src))
@@ -121,7 +121,7 @@ class Command(BaseCommand):
             self.console.write('{!error!}%s' % ex)
             return
 
-        if key not in config.keys():
+        if key not in list(config.keys()):
             self.console.write("{!error!}The key '%s' is invalid!" % key)
             return
 
@@ -139,4 +139,4 @@ class Command(BaseCommand):
         return client.core.set_config({key: val}).addCallback(on_set_config)
 
     def complete(self, text):
-        return [k for k in component.get('CoreConfig').keys() if k.startswith(text)]
+        return [k for k in list(component.get('CoreConfig').keys()) if k.startswith(text)]

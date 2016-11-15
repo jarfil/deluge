@@ -207,7 +207,7 @@ class Core(CorePluginBase, CoreNotifications):
     @export
     def set_config(self, config):
         'sets the config dictionary'
-        for key in config.keys():
+        for key in list(config.keys()):
             self.config[key] = config[key]
         self.config.save()
 

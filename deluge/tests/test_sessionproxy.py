@@ -7,8 +7,8 @@
 # See LICENSE for more details.
 #
 
-from twisted.internet.defer import maybeDeferred, succeed
-from twisted.internet.task import Clock
+from .twisted.internet.defer import maybeDeferred, succeed
+from .twisted.internet.task import Clock
 
 import deluge.component as component
 import deluge.ui.sessionproxy
@@ -33,7 +33,7 @@ class Core(object):
 
     def get_torrent_status(self, torrent_id, keys, diff=False):
         if not keys:
-            keys = self.torrents[torrent_id].keys()
+            keys = list(self.torrents[torrent_id].keys())
 
         if not diff:
             ret = {}
@@ -55,9 +55,9 @@ class Core(object):
 
     def get_torrents_status(self, filter_dict, keys, diff=False):
         if not filter_dict:
-            filter_dict['id'] = self.torrents.keys()
+            filter_dict['id'] = list(self.torrents.keys())
         if not keys:
-            keys = self.torrents['a'].keys()
+            keys = list(self.torrents['a'].keys())
         if not diff:
             if 'id' in filter_dict:
                 torrents = filter_dict['id']
@@ -119,24 +119,24 @@ class SessionProxyTestCase(BaseTestCase):
         return component.deregister(self.sp)
 
     def test_startup(self):
-        self.assertEquals(client.core.torrents['a'], self.sp.torrents['a'][1])
+        self.assertEqual(client.core.torrents['a'], self.sp.torrents['a'][1])
 
     def test_get_torrent_status_no_change(self):
         d = self.sp.get_torrent_status('a', [])
-        d.addCallback(self.assertEquals, client.core.torrents['a'])
+        d.addCallback(self.assertEqual, client.core.torrents['a'])
         return d
 
     def test_get_torrent_status_change_with_cache(self):
         client.core.torrents['a']['key1'] = 2
         d = self.sp.get_torrent_status('a', ['key1'])
-        d.addCallback(self.assertEquals, {'key1': 1})
+        d.addCallback(self.assertEqual, {'key1': 1})
         return d
 
     def test_get_torrent_status_change_without_cache(self):
         client.core.torrents['a']['key1'] = 2
         self.clock.advance(self.sp.cache_time + 0.1)
         d = self.sp.get_torrent_status('a', [])
-        d.addCallback(self.assertEquals, client.core.torrents['a'])
+        d.addCallback(self.assertEqual, client.core.torrents['a'])
         return d
 
     def test_get_torrent_status_key_not_updated(self):
@@ -144,7 +144,7 @@ class SessionProxyTestCase(BaseTestCase):
         self.sp.get_torrent_status('a', ['key1'])
         client.core.torrents['a']['key2'] = 99
         d = self.sp.get_torrent_status('a', ['key2'])
-        d.addCallback(self.assertEquals, {'key2': 99})
+        d.addCallback(self.assertEqual, {'key2': 99})
         return d
 
     def test_get_torrents_status_key_not_updated(self):
@@ -152,5 +152,5 @@ class SessionProxyTestCase(BaseTestCase):
         self.sp.get_torrents_status({'id': ['a']}, ['key1'])
         client.core.torrents['a']['key2'] = 99
         d = self.sp.get_torrents_status({'id': ['a']}, ['key2'])
-        d.addCallback(self.assertEquals, {'a': {'key2': 99}})
+        d.addCallback(self.assertEqual, {'a': {'key2': 99}})
         return d
